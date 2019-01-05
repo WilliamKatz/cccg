@@ -7,7 +7,7 @@ class App extends Component {
     super(props);
     this.state = { image: "", codeString: "" };
 
-    this.onQRCamera = this.onQRCamera.bind(this); 
+    this.onQRCamera = this.onQRCamera.bind(this);
     this.onQRCodeRead = this.onQRCodeRead.bind(this);
   }
 
@@ -29,10 +29,13 @@ class App extends Component {
   {
     return(
       <div>
+        <div class='center'>
         <label className='qrcode-text-btn'>
           <input type='file' accept='image/*' capture='environment' onChange={e => this.onQRCamera(e.target.files[0])}></input>
         </label>
-        <input type='text' className='qrcode-text' defaultValue={this.state.codeString}></input>
+        <div display='block'><input type='text' className='qrcode-text' defaultValue={this.state.codeString}></input></div>
+        <button>Search</button>
+        </div>
         <Canvas image={this.state.image} onQRCodeChange={this.onQRCodeRead} className='canvas'/>
       </div>
     )
@@ -41,7 +44,7 @@ class App extends Component {
 
 export default App;
 
-  
+
 /*
 <input type=text class=qrcode-text
 ><label class=qrcode-text-btn>

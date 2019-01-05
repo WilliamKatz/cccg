@@ -34,3 +34,8 @@ code {
   background-color: blue;
   display: none;
 }
+
+.center {
+  margin: auto;
+  width: 30%;
+}
