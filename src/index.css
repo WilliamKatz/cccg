@@ -34,3 +34,11 @@ code {
   background-color: blue;
   display: none;
 }
+
+.ipfs {
+  display: block;
+}
+
+.image {
+  flex: 1;
+}
