@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import storehash from './storehash';
-import Web3 from 'web3';
 import ipfs from './ipfs';
 import Error from './Error';
 
@@ -14,6 +13,8 @@ export default class RoastDataIPFSComponent extends Component {
     this.convertUint8ArrayToImage = this.convertUint8ArrayToImage.bind(this);
     this.fetchRoastDataOnIPFS = this.fetchRoastDataOnIPFS.bind(this);
     this.element = this.element.bind(this);
+
+    this.fetchRoastDataOnIPFS(props.roastToken);
   }
 
   componentDidUpdate(prevProps) {
@@ -30,7 +31,7 @@ export default class RoastDataIPFSComponent extends Component {
     // only call the backend when we get a roast token
     // TODO: get rid of magic number
     console.log("fetch");
-    if (typeof(roastToken) == 'string' && String(roastToken).length == 5) {
+    if (typeof(roastToken) === 'string' && String(roastToken).length === 5) {
       console.log("eth address " + window.ethereum.selectedAddress);
       storehash.methods.roastDataOnIPFS(roastToken).call({ from: window.ethereum.selectedAddress }, (error, result) => {
         this.handleRoastDataIPFS(error, result)
@@ -76,7 +77,7 @@ export default class RoastDataIPFSComponent extends Component {
   }
 
   element = () => {
-    return this.state.error != "" ?  <Error error={this.state.error} /> : <img className='image' src={this.state.imageSource} />
+    return this.state.error !== "" ?  <Error error={this.state.error} /> : <img className='image' src={this.state.imageSource} />
   }
 
   render() {

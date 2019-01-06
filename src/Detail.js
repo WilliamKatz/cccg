@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import storehash from './storehash';
-import Web3 from 'web3';
-import ipfs from './ipfs';
 import RoastDataIPFSComponent from './RoastDataIPFSComponent';
 import RoastedBy from "./RoastedBy";
 
 
-export default class RoastComponent extends Component {
+export default class Detail extends Component {
 
   constructor (props) {
     super(props);
-    this.state = { roastToken: props.roastToken };
+    this.state = { roastToken: props.roastToken, greenToken: props.greenToken };
   }
 
   componentDidUpdate(prevProps) {
@@ -24,8 +21,8 @@ export default class RoastComponent extends Component {
     console.log("rendering RoastComponent" + this.state.roastToken);
     return (
       <div>
-        <RoastDataIPFSComponent roastToken={this.state.roastToken}/>
         <RoastedBy roastToken={this.state.roastToken}/>
+        <RoastDataIPFSComponent roastToken={this.state.roastToken}/>
       </div>
     )
   }
