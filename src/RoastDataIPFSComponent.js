@@ -8,17 +8,33 @@ export default class RoastDataIPFSComponent extends Component {
 
   constructor (props) {
     super(props);
-    this.state = { roastToken: props.roastToken, imageSource: "" };
+    this.state = { roastToken: props.roastToken, imageSource: ""};
     this.handleRoastDataIPFS = this.handleRoastDataIPFS.bind(this);
     this.convertUint8ArrayToImage = this.convertUint8ArrayToImage.bind(this);
+    this.fetchRoastDataOnIPFS = this.fetchRoastDataOnIPFS.bind(this);
   }
 
-  componentDidMount() {
-    storehash.methods.roastDataOnIPFS(this.state.roastToken).call({ from: window.ethereum.selectedAddress }, (error, result) => {
-      this.handleRoastDataIPFS(error, result)
-    }) //end storehash
+  componentDidUpdate(prevProps) {
+  // Typical usage (don't forget to compare props): if we dont we cause an inifite loop
+    if (this.props.roastToken !== prevProps.roastToken) {
+      console.log(this.props.roastToken + "roastdataipfs compnent did update");
+      this.fetchRoastDataOnIPFS(this.props.roastToken)
+    }
   }
 
+  /// Fetch IPFS hash from backend
+  fetchRoastDataOnIPFS(roastToken) {
+    // only call the backend when we get a roast token
+    // TODO: get rid of magic number
+    if (roastToken == '10007') {
+      console.log("eth address " + window.ethereum.selectedAddress);
+      storehash.methods.roastDataOnIPFS(roastToken).call({ from: window.ethereum.selectedAddress }, (error, result) => {
+        this.handleRoastDataIPFS(error, result)
+      }) //end storehash
+    }
+  }
+
+  // Handle repspnse from BE for 'methods.roastDataOnIPFS'
   handleRoastDataIPFS = (error, result) => {
     console.log(error)
     console.log(result)
@@ -31,13 +47,15 @@ export default class RoastDataIPFSComponent extends Component {
           if (file.content != null) {
             this.setState({ imageSource: this.convertUint8ArrayToImage(file.content) });
           }
-        })// end for each
+        }) // end for each
       }) // end result
     } else {
       //TODO: show an error to user
-    }// end error
+      this.setState({ imageSource: "" });
+    } // end error
   } // end handleRoastDataIPFS
 
+  /// Image blob helper function
   convertUint8ArrayToImage = (array) => {
     //THE FUCKING MAGIC!!!!!
     //https://github.com/ipfs/js-ipfs/issues/848
@@ -50,7 +68,7 @@ export default class RoastDataIPFSComponent extends Component {
 
   render() {
     return (
-      <img className='image' src={this.state.imageSource} />
+        <img className='image' onLoad={this.fetchRoastDataOnIPFS()} src={this.state.imageSource} />
     )
   }
 }

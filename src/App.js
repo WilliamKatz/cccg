@@ -10,15 +10,18 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = { image: "",
-              roastToken: "10007",
+              roastToken: "",
+         roastTokenInput: "",
                 ipfsHash: "",
                  account: "",
                    error: "",
-             imageSource: ""};
+             imageSource: "" };
 
     this.onQRCamera = this.onQRCamera.bind(this);
     this.onQRCodeRead = this.onQRCodeRead.bind(this);
     this.onManualQRCodeSubmit = this.onManualQRCodeSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+
 
     //deteremine who the provider is
     // const { currentProvider: cp } = window.web3
@@ -71,23 +74,30 @@ class App extends Component {
     this.setState({ roastToken: roastToken });
   }
 
+  //manually entry of roast token
+  handleChange(event) {
+    this.setState({ roastTokenInput: event.target.value});
+  }
+
+
   /// Called on manual form submittal of roast token id
   onManualQRCodeSubmit(e) {
     e.preventDefault()
     console.log("Submitting with account" + this.state.account);
-    this.setState({ roastToken: e.target.value });
+    console.log(  this.state.roastTokenInput);
+    this.setState({ roastToken: this.state.roastTokenInput });
   }
 
   render()
   {
+    // console.log("we are rending app again");
     return(
       <div>
-        <div class='center'>
         <label className='qrcode-text-btn'>
           <input type='file' accept='image/*' capture='environment' onChange={e => this.onQRCamera(e.target.files[0])}></input>
         </label>
         <form onSubmit={this.onManualQRCodeSubmit}>
-        <input type='text' className='qrcode-text' defaultValue={this.state.roastToken} />
+        <input type="text" className='qrcode-text' value={this.state.value} onChange={this.handleChange} />
         <input type='submit' value='Submit' />
         </form>
         <input type='text' defaultValue={this.state.ipfsHash} />

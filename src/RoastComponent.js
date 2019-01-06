@@ -12,7 +12,15 @@ export default class RoastComponent extends Component {
     this.state = { roastToken: props.roastToken };
   }
 
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props): if we dont we cause an inifite loop
+    if (this.props.roastToken !== prevProps.roastToken) {
+      this.setState({ roastToken: this.props.roastToken });
+    }
+  }
+
   render() {
+    console.log("rendering RoastComponent" + this.state.roastToken);
     return (
       <div>
         <RoastDataIPFSComponent roastToken={this.state.roastToken} />
