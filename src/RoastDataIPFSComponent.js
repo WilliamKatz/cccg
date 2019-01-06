@@ -2,22 +2,25 @@ import React, { Component } from 'react';
 import storehash from './storehash';
 import Web3 from 'web3';
 import ipfs from './ipfs';
+import Error from './Error';
 
 
 export default class RoastDataIPFSComponent extends Component {
 
   constructor (props) {
     super(props);
-    this.state = { roastToken: props.roastToken, imageSource: ""};
+    this.state = { roastToken: props.roastToken, imageSource: "", error:  "" };
     this.handleRoastDataIPFS = this.handleRoastDataIPFS.bind(this);
     this.convertUint8ArrayToImage = this.convertUint8ArrayToImage.bind(this);
     this.fetchRoastDataOnIPFS = this.fetchRoastDataOnIPFS.bind(this);
+    this.element = this.element.bind(this);
   }
 
   componentDidUpdate(prevProps) {
   // Typical usage (don't forget to compare props): if we dont we cause an inifite loop
     if (this.props.roastToken !== prevProps.roastToken) {
       console.log(this.props.roastToken + "roastdataipfs compnent did update");
+      this.setState({ roastToken: this.props.roastToken });
       this.fetchRoastDataOnIPFS(this.props.roastToken)
     }
   }
@@ -26,11 +29,14 @@ export default class RoastDataIPFSComponent extends Component {
   fetchRoastDataOnIPFS(roastToken) {
     // only call the backend when we get a roast token
     // TODO: get rid of magic number
-    if (roastToken == '10007') {
+    console.log("fetch");
+    if (typeof(roastToken) == 'string' && String(roastToken).length == 5) {
       console.log("eth address " + window.ethereum.selectedAddress);
       storehash.methods.roastDataOnIPFS(roastToken).call({ from: window.ethereum.selectedAddress }, (error, result) => {
         this.handleRoastDataIPFS(error, result)
       }) //end storehash
+    } else {
+      this.setState({ error: "Please input a valid roast token id"})
     }
   }
 
@@ -39,19 +45,22 @@ export default class RoastDataIPFSComponent extends Component {
     console.log(error)
     console.log(result)
     if (error == null) {
-      this.setState({ ipfsHash: result });
       console.log(result);
       ipfs.get(result, (err, files) => {
-        files.forEach((file) => {
-          console.log(file);
-          if (file.content != null) {
-            this.setState({ imageSource: this.convertUint8ArrayToImage(file.content) });
-          }
-        }) // end for each
+        if (err == null) {
+          files.forEach((file) => {
+            console.log(file);
+            if (file.content != null) {
+              this.setState({ imageSource: this.convertUint8ArrayToImage(file.content), error: "" });
+            }
+          }) // end for each
+        } else {
+          this.setState({ error: "Unable to fetch from IFPS" });
+        }
       }) // end result
     } else {
       //TODO: show an error to user
-      this.setState({ imageSource: "" });
+      this.setState({ imageSource: "", error: "handleRoastDataIPFS" });
     } // end error
   } // end handleRoastDataIPFS
 
@@ -66,9 +75,15 @@ export default class RoastDataIPFSComponent extends Component {
     return imageUrl;
   }
 
+  element = () => {
+    return this.state.error != "" ?  <Error error={this.state.error} /> : <img className='image' src={this.state.imageSource} />
+  }
+
   render() {
     return (
-        <img className='image' onLoad={this.fetchRoastDataOnIPFS()} src={this.state.imageSource} />
+      <div>
+      {this.element()}
+      </div>
     )
   }
 }

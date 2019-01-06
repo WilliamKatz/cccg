@@ -4,18 +4,20 @@ import storehash from './storehash';
 import Web3 from 'web3';
 import ipfs from './ipfs';
 import RoastComponent from './RoastComponent';
+import Error from './Error';
 
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = { image: "",
-              roastToken: "",
-         roastTokenInput: "",
-                ipfsHash: "",
-                 account: "",
+                   roastToken: "",
+                   roastTokenInput: "",
+                   ipfsHash: "",
+                   account: "",
                    error: "",
-             imageSource: "" };
+                   imageSource: "",
+                   error: ""};
 
     this.onQRCamera = this.onQRCamera.bind(this);
     this.onQRCodeRead = this.onQRCodeRead.bind(this);
@@ -87,12 +89,12 @@ class App extends Component {
     console.log(  this.state.roastTokenInput);
     this.setState({ roastToken: this.state.roastTokenInput });
   }
-
   render()
   {
     // console.log("we are rending app again");
     return(
       <div>
+        <Error error={this.state.error} />
         <label className='qrcode-text-btn'>
           <input type='file' accept='image/*' capture='environment' onChange={e => this.onQRCamera(e.target.files[0])}></input>
         </label>
@@ -101,9 +103,7 @@ class App extends Component {
         <input type='submit' value='Submit' />
         </form>
         <input type='text' defaultValue={this.state.ipfsHash} />
-        <input type='text' defaultValue={this.state.account} />
-        <input type='text' defaultValue={this.state.error} />
-        <RoastComponent roastToken={this.state.roastToken} />
+        <RoastComponent roastToken={this.state.roastToken}/>
         <Canvas image={this.state.image} onQRCodeChange={this.onQRCodeRead} className='canvas'/>
       </div>
     )
