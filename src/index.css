@@ -35,7 +35,10 @@ code {
   display: none;
 }
 
-.center {
-  margin: auto;
-  width: 30%;
+.ipfs {
+  display: block;
+}
+
+.image {
+  flex: 1;
 }
