@@ -35,10 +35,55 @@ code {
   display: none;
 }
 
+.scanner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.details {
+  max-width: 50%;
+  vertical-align: middle;
+  word-wrap: break-word;
+  overflow: visible;
+}
+
 .ipfs {
   display: block;
 }
 
+.Collapsible {
+  background-color: green;
+}
+
+.Collapsible__contentOuter {
+  background-color: blue;
+}
+
+.Collapsible__contentInner {
+  background-color: red;
+}
+
 .image {
-  flex: 1;
+  max-width: 100%;
+  vertical-align: middle;
+  word-wrap: break-word;
+  overflow: visible;
+}
+
+body {
+  font-family: Helvetica;
+}
+
+table {
+  max-width: 50%;
+  vertical-align: middle;
+  word-wrap: break-word;
+  overflow: visible;
+}
+
+td {
+  font-family: Helvetica;
+  font-size: .5em;
 }

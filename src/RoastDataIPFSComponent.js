@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import storehash from './storehash';
 import ipfs from './ipfs';
 import Error from './Error';
+import './index.css';
 
 
 export default class RoastDataIPFSComponent extends Component {
@@ -41,7 +42,7 @@ export default class RoastDataIPFSComponent extends Component {
     }
   }
 
-  // Handle repspnse from BE for 'methods.roastDataOnIPFS'
+  // Handle repspnse from BE for roastDataOnIPFS
   handleRoastDataIPFS = (error, result) => {
     console.log(error)
     console.log(result)
@@ -77,6 +78,7 @@ export default class RoastDataIPFSComponent extends Component {
   }
 
   element = () => {
+    // eslint-disable-next-line
     return this.state.error !== "" ?  <Error error={this.state.error} /> : <img className='image' src={this.state.imageSource} />
   }
 

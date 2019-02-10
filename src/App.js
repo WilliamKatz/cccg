@@ -3,6 +3,8 @@ import Canvas from './canvas';
 import Web3 from 'web3';
 import Detail from './Detail';
 import Error from './Error';
+import './index.css';
+
 
 class App extends Component {
 
@@ -11,7 +13,7 @@ class App extends Component {
     this.state = { image: "",
                    roastToken: "",
                    greenToken: "0",
-                   roastTokenInput: "",
+                   roastTokenInput: "10007",
                    ipfsHash: "",
                    account: "",
                    error: "",
@@ -91,7 +93,7 @@ class App extends Component {
   }
 
   scannerDiv() {
-      return this.state.mode === "scanner" ? <div>
+      return this.state.mode === "scanner" ? <div className='scanner'>
       <label className='qrcode-text-btn'>
       <input type='file' accept='image/*' capture='environment' onChange={e => this.onQRCamera(e.target.files[0])}></input>
       </label>
@@ -122,7 +124,7 @@ class App extends Component {
         <Error error={this.state.error} />
         <div> {this.scanAgainDiv()} </div>
         <div> {this.scannerDiv()} </div>
-        <div> {this.detailDiv()} </div>
+        <div className='details'> {this.detailDiv()} </div>
         <Canvas image={this.state.image} onQRCodeChange={this.onQRCodeRead} className='canvas'/>
       </div>
     )
